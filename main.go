@@ -346,7 +346,7 @@ func scrapeClientRequest(searchURL string, proxyString interface{}) (*http.Respo
 	return res, nil
 }
 func main() {
-	res, err := GoogleScrape("koustav dhar", "com", "en", nil, 1, 100, 10)
+	res, err := GoogleScrape("Avengers End Game", "com", "en", nil, 2, 30, 10)
 	if err == nil {
 		for _, res := range res {
 			fmt.Println(res)
