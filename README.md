@@ -6,4 +6,9 @@ A google scraper built using golang .
 - go build
 - go run main.go
 
-[TO DO] : Extend the CLI functionality and better formatting.
+
+## SCRAPING EXAMPLE
+<img src="/img/google_scraper.png" alt="terminal_ss" style="height: 400px; width:800px;"/>
+
+
+[TO DO] : Better formatting.

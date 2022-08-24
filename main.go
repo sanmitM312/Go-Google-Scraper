@@ -7,6 +7,9 @@ import (
 	"net/url"
 	"strings"
 	"time"
+	"bufio"
+	"os"
+	"strconv"
 
 	"github.com/PuerkitoBio/goquery"
 )
@@ -307,6 +310,7 @@ func GoogleScrape(searchTerm, countryCode, languageCode string, proxyString inte
 		return nil, err
 	}
 
+	// fmt.Println("Results limit : ",count)
 	for _, page := range googlePages {
 		res, err := scrapeClientRequest(page, proxyString)
 		if err != nil {
@@ -323,9 +327,10 @@ func GoogleScrape(searchTerm, countryCode, languageCode string, proxyString inte
 		for _, result := range data {
 			results = append(results, result)
 		}
+
 		time.Sleep(time.Duration(backoff) * time.Second)
 	}
-	return results, nil
+	return results[:count], nil
 }
 
 func scrapeClientRequest(searchURL string, proxyString interface{}) (*http.Response, error) {
@@ -346,10 +351,33 @@ func scrapeClientRequest(searchURL string, proxyString interface{}) (*http.Respo
 	return res, nil
 }
 func main() {
-	res, err := GoogleScrape("Avengers End Game", "com", "en", nil, 2, 30, 10)
+	// var queryString string
+	// var resultCnt int
+
+	fmt.Println("Enter your query : ")
+	scanner := bufio.NewScanner(os.Stdin)
+	scanner.Scan()
+	queryString := scanner.Text()
+
+	fmt.Println("Enter max number of results to be displayed : ")
+	scanner = bufio.NewScanner(os.Stdin)
+	scanner.Scan()
+	resultCnt, _ := strconv.Atoi(scanner.Text())
+
+	fmt.Println("Enter max number of pages to parse : ")
+	scanner = bufio.NewScanner(os.Stdin)
+	scanner.Scan()
+	pgCnt, _ := strconv.Atoi(scanner.Text())
+
+   
+
+	res, err := GoogleScrape(queryString, "com", "en", nil, pgCnt, resultCnt, 5)
 	if err == nil {
+		fmt.Println("RESULTS FOR QUERY: ",queryString)
 		for _, res := range res {
 			fmt.Println(res)
 		}
+	}else {
+		fmt.Println("ERROR IN SCRAPING THE RESULTS.")
 	}
 }
